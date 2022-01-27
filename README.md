@@ -1,13 +1,7 @@
 # teamYEET
 
-Admin page:
-
-127.0.0.1:8000/admin
-
-Admin Username: demo
-
-Admin Password: D3M0-CrAzY
-
+Work in realtime_pr directory.
+Best if you move that folder outside of the git folder.
 
 tryDjango commands to run:
 
