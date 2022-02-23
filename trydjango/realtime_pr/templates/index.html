@@ -19,6 +19,8 @@
                     <canvas id="myChart" width="400" height="200"></canvas>
                     <h1 id="temp">{{ text }}</h1>
                     <h1 id="accx">{{ text }}</h1>
+                    <h1 id="accy">{{ text }}</h1>
+                    <h1 id="accz">{{ text }}</h1>
                 </div>
             </div>
         </div>
@@ -66,7 +68,13 @@
                 console.log(myData);
             }
             else if (data.sensor == 'accx') {
-                document.querySelector('#accx').innerText = data.value + " m/s/s";
+                document.querySelector('#accx').innerText = "X: " + data.value + " m/s/s";
+            }
+            else if (data.sensor == 'accy') {
+                document.querySelector('#accy').innerText = "Y: " + data.value + " m/s/s";
+            }
+            else if (data.sensor == 'accz') {
+                document.querySelector('#accz').innerText = "Z: " + data.value + " m/s/s";
             }
         }
         

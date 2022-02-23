@@ -23,7 +23,9 @@ class WSConsumer(WebsocketConsumer):
             # forceVal = randint(1,100)
 
             tempVal = counter.get_temp()
-            accxVal = counter.get_accx()
+            accxVal = counter.get_acc('x')
+            accyVal = counter.get_acc('y')
+            acczVal = counter.get_acc('z')
 
             TempTimestamps.append(i)
             TempDataValues.append(tempVal)
@@ -38,4 +40,6 @@ class WSConsumer(WebsocketConsumer):
 
             self.send(json.dumps({'time': i, 'sensor': TempSensor.name, 'value': tempVal, 'unit': TempSensor.unit_name}))
             self.send(json.dumps({'time': i, 'sensor': 'accx', 'value': accxVal, 'unit': 'm/ss'}))
+            self.send(json.dumps({'time': i, 'sensor': 'accy', 'value': accyVal, 'unit': 'm/ss'}))
+            self.send(json.dumps({'time': i, 'sensor': 'accz', 'value': acczVal, 'unit': 'm/ss'}))
             sleep(1)

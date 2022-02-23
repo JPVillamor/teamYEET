@@ -18,6 +18,12 @@ def get_temp():
     temp = sensor.temperature
     return temp
     
-def get_accx():
+def get_acc(dimension):
     accx, accy, accz = sensor.acceleration
-    return accx
+    
+    if dimension == 'x':
+        return accx
+    elif dimension == 'y':
+        return accy
+    elif dimension == 'z':
+        return accz
