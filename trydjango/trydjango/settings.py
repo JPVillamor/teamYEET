@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'MAT.apps.MatConfig',
+    #'MAT.apps.MatConfig',
     #'MAT.models.SensorRecord',
 ]
 

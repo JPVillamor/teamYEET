@@ -17,7 +17,8 @@
                 <!---<div class="col-6 mx-auto mt-5">-->
                 <div>
                     <canvas id="myChart" width="400" height="200"></canvas>
-                    <h1 id="app">{{ text }}</h1>
+                    <h1 id="temp">{{ text }}</h1>
+                    <h1 id="accx">{{ text }}</h1>
                 </div>
             </div>
         </div>
@@ -52,17 +53,21 @@
 
         socket.onmessage = function(event) {
             var data = JSON.parse(event.data); //data.<dictionary key>
-            
-            document.querySelector('#app').innerText = data.value; //JSON.stringify(data);
-            myData.push(data.value);
-            //time_axis.push(time_counter++);
-            myChart.data.labels.push(time_counter.toString());
-            time_counter++;
-            myChart.data.datasets.forEach((dataset) => {
-                dataset.data.push(myData[myData.length-1]);
-            });
-            myChart.update();
-            console.log(myData);
+            if (data.sensor == 'temperature'){
+                document.querySelector('#temp').innerText = data.value + " C"; //JSON.stringify(data);
+                myData.push(data.value);
+                //time_axis.push(time_counter++);
+                myChart.data.labels.push(time_counter.toString());
+                time_counter++;
+                myChart.data.datasets.forEach((dataset) => {
+                    dataset.data.push(myData[myData.length-1]);
+                });
+                myChart.update();
+                console.log(myData);
+            }
+            else if (data.sensor == 'accx') {
+                document.querySelector('#accx').innerText = data.value + " m/s/s";
+            }
         }
         
 
