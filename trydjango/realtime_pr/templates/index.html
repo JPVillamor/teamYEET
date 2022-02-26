@@ -16,7 +16,8 @@
             <div class="row">
                 <!---<div class="col-6 mx-auto mt-5">-->
                 <div>
-                    <canvas id="myChart" width="400" height="200"></canvas>
+                    <canvas id="tempChart" width="400" height="200"></canvas>
+                    <canvas id="accChart" width="400" height="200"></canvas>
                     <h1 id="temp">{{ text }}</h1>
                     <h1 id="accx">{{ text }}</h1>
                     <h1 id="accy">{{ text }}</h1>
@@ -26,13 +27,21 @@
         </div>
     
     <script>
-        var socket = new WebSocket('ws://localhost:8000/ws/some_url/');
-        const myData = [];
+        // var socket = new WebSocket('ws://localhost:8000/ws/some_url/');
+        const socket = new WebSocket (
+            'ws://' +
+            window.location.host +
+            '/ws/some_url/'
+        );
+        const tempData = [];
+        const accxData = [];
+        const accyData = [];
+        const acczData = [];
         var time_counter = 0;
         const time_axis = [];
 
-        const ctx = document.getElementById('myChart');
-        const myChart = new Chart(ctx, {
+        const ctx = document.getElementById('tempChart');
+        const tempChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: [],
@@ -47,7 +56,48 @@
             options: {
                 scales: {
                     y: {
-                        beginAtZero: true
+                        // beginAtZero: true
+                        suggestedMin: 0,
+                        suggestedMax: 100 
+                    }
+                }
+            }
+        });
+        
+        const ctx2 = document.getElementById('accChart');
+        const accChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Acceleration X',
+                    data: [],
+                    backgroundColor: 'rgb(132, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Acceleration Y',
+                    data: [],
+                    backgroundColor: 'rgb(255, 255, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Acceleration Z',
+                    data: [],
+                    backgroundColor: 'rgb(255, 99, 255)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    borderWidth: 1
+                }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        // beginAtZero: true
+                        suggestedMin: 0,
+                        suggestedMax: 25 
                     }
                 }
             }
@@ -55,26 +105,57 @@
 
         socket.onmessage = function(event) {
             var data = JSON.parse(event.data); //data.<dictionary key>
-            if (data.sensor == 'temperature'){
+            if (data.sensor == 'temp'){
                 document.querySelector('#temp').innerText = data.value + " C"; //JSON.stringify(data);
-                myData.push(data.value);
+                tempData.push(data.value);
                 //time_axis.push(time_counter++);
-                myChart.data.labels.push(time_counter.toString());
+                tempChart.data.labels.push(time_counter.toString());
                 time_counter++;
-                myChart.data.datasets.forEach((dataset) => {
-                    dataset.data.push(myData[myData.length-1]);
+                tempChart.data.datasets.forEach((dataset) => {
+                    if (dataset.data.length > 50) {
+                        dataset.data.shift();
+                        tempChart.data.labels.shift();
+                    }
+                    dataset.data.push(tempData[tempData.length-1]);
                 });
-                myChart.update();
-                console.log(myData);
+                tempChart.update('none');
+                console.log(tempData);
             }
             else if (data.sensor == 'accx') {
                 document.querySelector('#accx').innerText = "X: " + data.value + " m/s/s";
+                accxData.push(data.value);
+                accChart.data.labels.pop()
+                accChart.data.labels.push(time_counter.toString());
+                
+                accChart.data.datasets[0].data.pop();
+                accChart.data.datasets[0].data.push(accxData[accxData.length-1]);
+                
+                accChart.update('none');
+                console.log(accxData);
             }
             else if (data.sensor == 'accy') {
                 document.querySelector('#accy').innerText = "Y: " + data.value + " m/s/s";
+                accyData.push(data.value);
+                accChart.data.labels.pop()
+                accChart.data.labels.push(time_counter.toString());
+                
+                accChart.data.datasets[1].data.pop();
+                accChart.data.datasets[1].data.push(accyData[accyData.length-1]);
+                
+                accChart.update('none');
+                console.log(accyData);
             }
             else if (data.sensor == 'accz') {
                 document.querySelector('#accz').innerText = "Z: " + data.value + " m/s/s";
+                acczData.push(data.value);
+                accChart.data.labels.pop()
+                accChart.data.labels.push(time_counter.toString());
+                
+                accChart.data.datasets[2].data.pop();
+                accChart.data.datasets[2].data.push(acczData[acczData.length-1]);
+                
+                accChart.update('none');
+                console.log(acczData);
             }
         }
         

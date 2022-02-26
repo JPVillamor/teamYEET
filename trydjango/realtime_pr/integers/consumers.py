@@ -9,7 +9,7 @@ class WSConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
 
-        for i in range(50):
+        for i in range(5000):
             # self.send(json.dumps({'message': randint(1,100)}))
             # forceVal = randint(1,100)
 
@@ -22,4 +22,4 @@ class WSConsumer(WebsocketConsumer):
             self.send(json.dumps({'time': i, 'sensor': 'accx', 'value': accxVal, 'unit': 'm/ss'}))
             self.send(json.dumps({'time': i, 'sensor': 'accy', 'value': accyVal, 'unit': 'm/ss'}))
             self.send(json.dumps({'time': i, 'sensor': 'accz', 'value': acczVal, 'unit': 'm/ss'}))
-            sleep(1)
+            sleep(.2)
