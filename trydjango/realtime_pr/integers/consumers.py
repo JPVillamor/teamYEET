@@ -8,6 +8,7 @@ from .models import User
 from .models import Record
 
 from . import counter
+from . import IR
 
 class WSConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -24,6 +25,8 @@ class WSConsumer(AsyncWebsocketConsumer):
         await AccelerometerY.save_to_db() 
         AccelerometerZ = await Sensor.create('accz', 'm/ss', 15, NewUser)
         await AccelerometerZ.save_to_db() 
+        IRSensor = await Sensor.create('ir', 'units', 10, NewUser)
+        await IRSensor.save_to_db() 
 
         for i in range(5000):
             # self.send(json.dumps({'message': randint(1,100)}))
@@ -49,8 +52,15 @@ class WSConsumer(AsyncWebsocketConsumer):
             NewRecord.pk = None
             await NewRecord.save_to_db()
             
+            irDataArray = IR.get_reading()
+            '''
+            NewRecord = await Record.create(i*200, irDataArray, NewUser.tool_selected, IRSensor, NewUser)
+            NewRecord.pk = None
+            await NewRecord.save_to_db()
+            '''
             await self.send(json.dumps({'time': i, 'sensor': 'temp', 'value': tempVal, 'unit': 'C'}))
             await self.send(json.dumps({'time': i, 'sensor': 'accx', 'value': accxVal, 'unit': 'm/ss'}))
             await self.send(json.dumps({'time': i, 'sensor': 'accy', 'value': accyVal, 'unit': 'm/ss'}))
             await self.send(json.dumps({'time': i, 'sensor': 'accz', 'value': acczVal, 'unit': 'm/ss'}))
+            await self.send(json.dumps({'time': i, 'sensor': 'ir', 'value': irDataArray, 'unit': 'units'}))
             await sleep(.2)
