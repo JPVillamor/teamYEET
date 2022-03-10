@@ -7,8 +7,9 @@ from .models import Sensor
 from .models import User
 from .models import Record
 
-from . import counter
-from . import IR
+#from . import counter
+#from . import IR
+from . import PIR
 
 class WSConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -25,13 +26,15 @@ class WSConsumer(AsyncWebsocketConsumer):
         await AccelerometerY.save_to_db() 
         AccelerometerZ = await Sensor.create('accz', 'm/ss', 15, NewUser)
         await AccelerometerZ.save_to_db() 
-        IRSensor = await Sensor.create('ir', 'units', 10, NewUser)
-        await IRSensor.save_to_db() 
+        #IRSensor = await Sensor.create('ir', 'units', 10, NewUser)
+        #await IRSensor.save_to_db() 
+        PIRSensor = await Sensor.create('pir', '', 1, NewUser)
+        await PIRSensor.save_to_db() 
 
         for i in range(5000):
             # self.send(json.dumps({'message': randint(1,100)}))
             # forceVal = randint(1,100)
-
+            '''
             tempVal = counter.get_temp()
             NewRecord = await Record.create(i*200, tempVal, NewUser.tool_selected, TempSensor, NewUser)
             NewRecord.pk = None
@@ -54,13 +57,20 @@ class WSConsumer(AsyncWebsocketConsumer):
             
             irDataArray = IR.get_reading()
             '''
+            PIRval = PIR.get_reading()
+            NewRecord = await Record.create(i*200, PIRval, NewUser.tool_selected, PIRSensor, NewUser)
+            NewRecord.pk = None
+            await NewRecord.save_to_db()
+
+            '''
             NewRecord = await Record.create(i*200, irDataArray, NewUser.tool_selected, IRSensor, NewUser)
             NewRecord.pk = None
             await NewRecord.save_to_db()
             '''
-            await self.send(json.dumps({'time': i, 'sensor': 'temp', 'value': tempVal, 'unit': 'C'}))
-            await self.send(json.dumps({'time': i, 'sensor': 'accx', 'value': accxVal, 'unit': 'm/ss'}))
-            await self.send(json.dumps({'time': i, 'sensor': 'accy', 'value': accyVal, 'unit': 'm/ss'}))
-            await self.send(json.dumps({'time': i, 'sensor': 'accz', 'value': acczVal, 'unit': 'm/ss'}))
-            await self.send(json.dumps({'time': i, 'sensor': 'ir', 'value': irDataArray, 'unit': 'units'}))
+            #await self.send(json.dumps({'time': i, 'sensor': 'temp', 'value': tempVal, 'unit': 'C'}))
+            #await self.send(json.dumps({'time': i, 'sensor': 'accx', 'value': accxVal, 'unit': 'm/ss'}))
+            #await self.send(json.dumps({'time': i, 'sensor': 'accy', 'value': accyVal, 'unit': 'm/ss'}))
+            #await self.send(json.dumps({'time': i, 'sensor': 'accz', 'value': acczVal, 'unit': 'm/ss'}))
+            #await self.send(json.dumps({'time': i, 'sensor': 'ir', 'value': irDataArray, 'unit': 'units'}))
+            await self.send(json.dumps({'time': i, 'sensor': 'pir', 'value': PIRval, 'unit': ''}))
             await sleep(.2)

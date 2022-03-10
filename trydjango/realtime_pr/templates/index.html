@@ -18,6 +18,8 @@
                 <div>
                     <canvas id="tempChart" width="400" height="200"></canvas>
                     <canvas id="accChart" width="400" height="200"></canvas>
+                    <canvas id="pirChart" width="400" height="200"></canvas>
+                    <h1 id="pir">{{ text }}</h1>
                     <h1 id="temp">{{ text }}</h1>
                     <h1 id="accx">{{ text }}</h1>
                     <h1 id="accy">{{ text }}</h1>
@@ -37,8 +39,34 @@
         const accxData = [];
         const accyData = [];
         const acczData = [];
+        const pirData = [];
         var time_counter = 0;
         const time_axis = [];
+
+
+        const ctx4 = document.getElementById('pirChart');
+        const pirChart = new Chart(ctx4, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'PIR Data',
+                    data: [],
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        // beginAtZero: true
+                        suggestedMin: 0,
+                        suggestedMax: 1 
+                    }
+                }
+            }
+        });
 
         const ctx = document.getElementById('tempChart');
         const tempChart = new Chart(ctx, {
@@ -157,6 +185,22 @@
                 accChart.update('none');
                 console.log(acczData);
             }
+	    else if (data.sensor == 'pir') {
+                document.querySelector('#pir').innerText = "Motion: " + data.value + " motion";
+                pirData.push(data.value);
+                //time_axis.push(time_counter++);
+                pirChart.data.labels.push(time_counter.toString());
+                //time_counter++;
+                pirChart.data.datasets.forEach((dataset) => {
+                    if (dataset.data.length > 50) {
+                        dataset.data.shift();
+                        pirChart.data.labels.shift();
+                    }
+                    dataset.data.push(pirData[pirData.length-1]);
+                });
+                pirChart.update('none');
+                console.log(pirData);
+	    }
         }
         
 
