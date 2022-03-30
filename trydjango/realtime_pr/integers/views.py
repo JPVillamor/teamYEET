@@ -1,13 +1,20 @@
 from django.shortcuts import render, redirect
 from .models import Record, User, Sensor
 from django.http import HttpResponse
+from .models import UserInfo
 
 import csv
 
 # Create your views here.
 def index(request):
     return render(request, 'index.html', context={'text': 'Hello World'})
-    
+
+def index(request):
+    return render(request, 'index.html', context={'text': 'Hello World'})
+
+def home(request):
+    return render(request, 'home.html')    
+
 def exportcsv(request):
     records = Record.objects.all()
     response = HttpResponse('text/csv')
@@ -20,3 +27,18 @@ def exportcsv(request):
         writer.writerow(rec)
     
     return response
+
+def getname(request):
+	if request.method == 'POST':
+		if request.POST.get('fname'):
+			
+			fname = request.POST['fname']
+			u = UserInfo(name = fname)
+			u.pk = 1
+			u.save()
+			#NewUser = User(u.name, 'brick', 'jackhammer')
+			#NewUser.pk = 1
+			#NewUser.save()
+			return render(request, 'index.html')
+		else:
+		    return render(request, 'index.html')

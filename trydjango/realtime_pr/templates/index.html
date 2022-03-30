@@ -24,6 +24,10 @@
                     <h1 id="accx">{{ text }}</h1>
                     <h1 id="accy">{{ text }}</h1>
                     <h1 id="accz">{{ text }}</h1>
+                    <h1 id="force1">{{ text }}</h1>
+                    <h1 id="force2">{{ text }}</h1>
+                    <h1 id="force3">{{ text }}</h1>
+                    <h1 id="force4">{{ text }}</h1>
                 </div>
             </div>
         </div>
@@ -185,6 +189,22 @@
                 accChart.update('none');
                 console.log(acczData);
             }
+            else if (data.sensor == 'force1') {
+                document.querySelector('#force1').innerText = "Force1: " + data.value + " Fredys";
+                
+            }
+            else if (data.sensor == 'force2') {
+                document.querySelector('#force2').innerText = "Force2: " + data.value + " Fredys";
+                
+            }
+            else if (data.sensor == 'force3') {
+                document.querySelector('#force3').innerText = "Force3: " + data.value + " Fredys";
+                
+            }
+            else if (data.sensor == 'force4') {
+                document.querySelector('#force4').innerText = "Force4: " + data.value + " Fredys";
+                
+            }
 	    else if (data.sensor == 'pir') {
                 document.querySelector('#pir').innerText = "Motion: " + data.value + " motion";
                 pirData.push(data.value);
@@ -198,6 +218,7 @@
                     }
                     dataset.data.push(pirData[pirData.length-1]);
                 });
+            
                 pirChart.update('none');
                 console.log(pirData);
 	    }

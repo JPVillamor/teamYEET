@@ -25,7 +25,7 @@ class Sensor(models.Model):
     name = models.CharField(max_length=200)
     unit_name = models.CharField(max_length=200)
     threshold_value = models.DecimalField(max_digits=5, decimal_places=2)
-    user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True)
+    #user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True)
 
     @database_sync_to_async
     def save_to_db(self):
@@ -33,8 +33,8 @@ class Sensor(models.Model):
 
     @classmethod
     @sync_to_async
-    def create(cls, name, unit_name, threshold_value, user):
-        sensor = cls(name=name, unit_name=unit_name, threshold_value=threshold_value, user=user)
+    def create(cls, name, unit_name, threshold_value):
+        sensor = cls(name=name, unit_name=unit_name, threshold_value=threshold_value)
         return sensor
 
     class Meta:
@@ -45,7 +45,7 @@ class Record(models.Model):
     data_value = models.DecimalField(max_digits=5, decimal_places=2)
     tool_used = models.CharField(max_length=200)
     sensor = models.ForeignKey(Sensor, models.SET_NULL, blank=True, null=True)
-    user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True)
+    #user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True)
 
     @database_sync_to_async
     def save_to_db(self):
@@ -53,9 +53,13 @@ class Record(models.Model):
 
     @classmethod
     @sync_to_async
-    def create(cls, timestamp, data_value, tool_used, sensor, user):
-        record = cls(timestamp=timestamp, data_value=data_value, tool_used=tool_used, sensor=sensor, user=user)
+    def create(cls, timestamp, data_value, tool_used, sensor):
+        record = cls(timestamp=timestamp, data_value=data_value, tool_used=tool_used, sensor=sensor)
         return record
 
     class Meta:
         ordering = ["timestamp"]
+
+class UserInfo(models.Model):
+        name = models.CharField(max_length = 100)
+        
