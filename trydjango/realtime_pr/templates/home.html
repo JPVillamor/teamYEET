@@ -12,7 +12,7 @@
 	
   <p>Please enter your name</p>
 	<div id="myDIV" style="text-align:center;">
-		<form action="/action_page.php" method="POST">
+	<form action="/action_page.php">
 		<label for="fname">First name:</label>
 		<input type="text" id="fname" name="fname"><br><br>
 		<label for="lname">Last name:</label>
@@ -91,7 +91,7 @@
     <br><br>
   </form>
 
-    <button id="view_all">View All</button>
+    <!-- <button id="view_all">View All</button>
     <button id="force">Force</button>
     <button id="temperature">Temperature</button>
     
@@ -99,9 +99,9 @@
     <button id="sound">Sound</button>
     <button id="vibration">Vibration</button>
     <button id="light">Light</button>
-    <br><br><br><br>
+    <br><br><br><br> -->
 
-    <form action="{% url 'index'%}">
+    <form action="{% url 'force_setup'%}">
       <button type="submit">Start</button>
       </form>
 </div>

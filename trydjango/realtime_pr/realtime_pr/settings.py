@@ -122,7 +122,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+# this is the statics files context path when request the static file in url. for example http://127.0.0.1:8000/static/js/jquery-3.3.1.min.js
 STATIC_URL = '/static/'
+
+# this is the static files folder name which you created in django project root folder. This is different from above STATIC_URL. 
+STATICFILES_DIRS = [
+    BASE_DIR / "statics"
+]
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

@@ -78,29 +78,29 @@ class WSConsumer(AsyncWebsocketConsumer):
             
             with forcemux.force1:
                 forcemux.function(forcemux.force1, 1)
-            Force1Val = forcemux.force_out1
-            NewRecord = await Record.create(i*200, Force1Val, NewUser.tool_selected, ForceSensor1)
+            bottomForceVal = forcemux.force_out1
+            NewRecord = await Record.create(i*200, bottomForceVal, NewUser.tool_selected, ForceSensor1)
             NewRecord.pk = None
             await NewRecord.save_to_db()
             
             with forcemux.force2:
                 forcemux.function(forcemux.force2, 2)
-            Force2Val = forcemux.force_out2
-            NewRecord = await Record.create(i*200, Force2Val, NewUser.tool_selected, ForceSensor2)
+            leftForceVal = forcemux.force_out2
+            NewRecord = await Record.create(i*200, leftForceVal, NewUser.tool_selected, ForceSensor2)
             NewRecord.pk = None
             await NewRecord.save_to_db()
             
             with forcemux.force3:
                 forcemux.function(forcemux.force3, 3)
-            Force3Val = forcemux.force_out3
-            NewRecord = await Record.create(i*200, Force3Val, NewUser.tool_selected, ForceSensor3)
+            topForceVal = forcemux.force_out3
+            NewRecord = await Record.create(i*200, topForceVal, NewUser.tool_selected, ForceSensor3)
             NewRecord.pk = None
             await NewRecord.save_to_db()
             
             with forcemux.force4:
                 forcemux.function(forcemux.force4, 4)
-            Force4Val = forcemux.force_out4
-            NewRecord = await Record.create(i*200, Force4Val, NewUser.tool_selected, ForceSensor4)
+            rightForceVal = forcemux.force_out4
+            NewRecord = await Record.create(i*200, rightForceVal, NewUser.tool_selected, ForceSensor4)
             NewRecord.pk = None
             await NewRecord.save_to_db()
             
@@ -115,8 +115,8 @@ class WSConsumer(AsyncWebsocketConsumer):
             await self.send(json.dumps({'time': i, 'sensor': 'accz', 'value': acczVal, 'unit': 'm/ss'}))
             #await self.send(json.dumps({'time': i, 'sensor': 'ir', 'value': irDataArray, 'unit': 'units'}))
             await self.send(json.dumps({'time': i, 'sensor': 'pir', 'value': PIRval, 'unit': ''}))
-            await self.send(json.dumps({'time': i, 'sensor': 'force1', 'value': Force1Val, 'unit': 'lbs'}))
-            await self.send(json.dumps({'time': i, 'sensor': 'force2', 'value': Force2Val, 'unit': 'lbs'}))
-            await self.send(json.dumps({'time': i, 'sensor': 'force3', 'value': Force3Val, 'unit': 'lbs'}))
-            await self.send(json.dumps({'time': i, 'sensor': 'force4', 'value': Force4Val, 'unit': 'lbs'}))
+            await self.send(json.dumps({'time': i, 'sensor': 'bottomForce', 'value': bottomForceVal, 'unit': 'lbs'}))
+            await self.send(json.dumps({'time': i, 'sensor': 'leftForce', 'value': leftForceVal, 'unit': 'lbs'}))
+            await self.send(json.dumps({'time': i, 'sensor': 'topForce', 'value': topForceVal, 'unit': 'lbs'}))
+            await self.send(json.dumps({'time': i, 'sensor': 'rightForce', 'value': rightForceVal, 'unit': 'lbs'}))
             await sleep(.2)

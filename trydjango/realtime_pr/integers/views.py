@@ -13,7 +13,11 @@ def index(request):
     return render(request, 'index.html', context={'text': 'Hello World'})
 
 def home(request):
-    return render(request, 'home.html')    
+    return render(request, 'home.html')
+
+def force_setup(request):
+    return render(request, 'force_setup.html')    
+
 
 def exportcsv(request):
     records = Record.objects.all()
