@@ -1,122 +1,69 @@
-from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.generic.websocket import AsyncJsonWebsocketConsumer
 import json
 from asyncio import sleep
 from asgiref.sync import sync_to_async
 
+'''
 from .models import Sensor
 from .models import User
 from .models import Record
 from .models import UserInfo
 
-
 from . import counter
 #from . import IR
 from . import PIR
 from . import forcemux
+'''
 
+pause = False
+#timestamp = float(0)
 
-class WSConsumer(AsyncWebsocketConsumer):
-    async def connect(self):
-        await self.accept()
-        
-        # username = UserInfo.objects.get(pk = 1).name
-        
-        NewUser = await User.create("FREDWARD FUENTACLES", 'brick', 'jackhammer')
-        await NewUser.save_to_db()
-        
-        TempSensor = await Sensor.create('temp', 'C', 50)
-        await TempSensor.save_to_db() 
-        AccelerometerX = await Sensor.create('accx', 'm/ss', 15)
-        await AccelerometerX.save_to_db() 
-        AccelerometerY = await Sensor.create('accy', 'm/ss', 15)
-        await AccelerometerY.save_to_db() 
-        AccelerometerZ = await Sensor.create('accz', 'm/ss', 15)
-        await AccelerometerZ.save_to_db() 
-        #IRSensor = await Sensor.create('ir', 'units', 10, NewUser)
-        #await IRSensor.save_to_db() 
-        PIRSensor = await Sensor.create('pir', '', 1)
-        await PIRSensor.save_to_db() 
-        ForceSensor1 = await Sensor.create('force1', 'lbs', 5)
-        await ForceSensor1.save_to_db()
-        ForceSensor2 = await Sensor.create('force2', 'lbs', 5)
-        await ForceSensor2.save_to_db()
-        ForceSensor3 = await Sensor.create('force3', 'lbs', 5)
-        await ForceSensor3.save_to_db()
-        ForceSensor4 = await Sensor.create('force4', 'lbs', 5)
-        await ForceSensor4.save_to_db()
+class WSConsumer(AsyncJsonWebsocketConsumer):
+      async def connect(self):
+            global timestamp
+            self.groupname='dashboard'
+            await self.channel_layer.group_add(
+                  self.groupname,
+                  self.channel_name,
+            )
+            await self.accept()
+            timestamp = float(0)
+    
+      async def receive(self, text_data):
+            global pause
+            global timestamp
+            datapoint = json.loads(text_data)
+            msg_type = datapoint['type']
+            val = datapoint['value']
 
-        for i in range(5000):
-            # self.send(json.dumps({'message': randint(1,100)}))
-            # forceVal = randint(1,100)
-            
-            tempVal = counter.get_temp()
-            NewRecord = await Record.create(i*200, tempVal, NewUser.tool_selected, TempSensor)
-            NewRecord.pk = None
-            await NewRecord.save_to_db()
-            
-            accxVal = counter.get_acc('x')
-            NewRecord = await Record.create(i*200, accxVal, NewUser.tool_selected, AccelerometerX)
-            NewRecord.pk = None
-            await NewRecord.save_to_db()
-            
-            accyVal = counter.get_acc('y')
-            NewRecord = await Record.create(i*200, accyVal, NewUser.tool_selected, AccelerometerY)
-            NewRecord.pk = None
-            await NewRecord.save_to_db()
-            
-            acczVal = counter.get_acc('z')
-            NewRecord = await Record.create(i*200, acczVal, NewUser.tool_selected, AccelerometerZ)
-            NewRecord.pk = None
-            await NewRecord.save_to_db()
-            
-            #irDataArray = IR.get_reading()
-            
-            PIRval = PIR.get_reading()
-            NewRecord = await Record.create(i*200, PIRval, NewUser.tool_selected, PIRSensor)
-            NewRecord.pk = None
-            await NewRecord.save_to_db()
-            
-            with forcemux.force1:
-                forcemux.function(forcemux.force1, 1)
-            bottomForceVal = forcemux.force_out1
-            NewRecord = await Record.create(i*200, bottomForceVal, NewUser.tool_selected, ForceSensor1)
-            NewRecord.pk = None
-            await NewRecord.save_to_db()
-            
-            with forcemux.force2:
-                forcemux.function(forcemux.force2, 2)
-            leftForceVal = forcemux.force_out2
-            NewRecord = await Record.create(i*200, leftForceVal, NewUser.tool_selected, ForceSensor2)
-            NewRecord.pk = None
-            await NewRecord.save_to_db()
-            
-            with forcemux.force3:
-                forcemux.function(forcemux.force3, 3)
-            topForceVal = forcemux.force_out3
-            NewRecord = await Record.create(i*200, topForceVal, NewUser.tool_selected, ForceSensor3)
-            NewRecord.pk = None
-            await NewRecord.save_to_db()
-            
-            with forcemux.force4:
-                forcemux.function(forcemux.force4, 4)
-            rightForceVal = forcemux.force_out4
-            NewRecord = await Record.create(i*200, rightForceVal, NewUser.tool_selected, ForceSensor4)
-            NewRecord.pk = None
-            await NewRecord.save_to_db()
-            
-            '''
-            NewRecord = await Record.create(i*200, irDataArray, NewUser.tool_selected, IRSensor, NewUser)
-            NewRecord.pk = None
-            await NewRecord.save_to_db()
-            '''
-            await self.send(json.dumps({'time': i, 'sensor': 'temp', 'value': tempVal, 'unit': 'C'}))
-            await self.send(json.dumps({'time': i, 'sensor': 'accx', 'value': accxVal, 'unit': 'm/ss'}))
-            await self.send(json.dumps({'time': i, 'sensor': 'accy', 'value': accyVal, 'unit': 'm/ss'}))
-            await self.send(json.dumps({'time': i, 'sensor': 'accz', 'value': acczVal, 'unit': 'm/ss'}))
-            #await self.send(json.dumps({'time': i, 'sensor': 'ir', 'value': irDataArray, 'unit': 'units'}))
-            await self.send(json.dumps({'time': i, 'sensor': 'pir', 'value': PIRval, 'unit': ''}))
-            await self.send(json.dumps({'time': i, 'sensor': 'bottomForce', 'value': bottomForceVal, 'unit': 'lbs'}))
-            await self.send(json.dumps({'time': i, 'sensor': 'leftForce', 'value': leftForceVal, 'unit': 'lbs'}))
-            await self.send(json.dumps({'time': i, 'sensor': 'topForce', 'value': topForceVal, 'unit': 'lbs'}))
-            await self.send(json.dumps({'time': i, 'sensor': 'rightForce', 'value': rightForceVal, 'unit': 'lbs'}))
-            await sleep(.2)
+            if msg_type == 'control':
+                  if val == 0:
+                        pause = True
+                        #print(pause)
+                  elif val == 1:
+                        pause = False
+                        #print(pause)
+
+            elif msg_type == 'data':
+                  if pause == True:
+                        pass
+                  elif pause == False:
+                        #print(pause)
+                        await self.channel_layer.group_send(
+                              self.groupname,
+                              {
+                              'type':'frontend', #function name to run
+                              'value':val #value to send function
+                              }
+                        )
+            #timestamp = timestamp + 0.4
+
+      async def frontend(self,event):
+            valOther=event['value']
+            await self.send(text_data=json.dumps(valOther))# send for frontend
+
+      async def disconnect(self, close_code):
+            await self.channel_layer.group_discard(
+                  self.groupname,
+                  self.channel_name
+            )   

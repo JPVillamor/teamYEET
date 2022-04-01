@@ -22,8 +22,8 @@ def get_acc(dimension):
     accx, accy, accz = sensor.acceleration
     
     if dimension == 'x':
-        return accx
+        return round(accx, 3)
     elif dimension == 'y':
-        return accy
+        return round(accy, 3)
     elif dimension == 'z':
-        return accz
+        return round(accz, 3)

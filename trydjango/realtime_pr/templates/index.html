@@ -126,7 +126,7 @@
 
                 </style>
                  <div> 
-
+                    
                     <div id="ACC" style="display: inline-block">
                         <canvas id="myChartAcc" width="500px" height="200px"></canvas>
                            
@@ -134,12 +134,13 @@
                         <p1 id="accy">{{ text }}</p1>
                         <p1 id="accz">{{ text }}</p1>
                     </div>
+                    
 
                 
                     <div id="TEMP" style="display: inline-block">
                         <canvas id="myChartTemp" width="500px" height="200px"></canvas>
                         <p1 id="temp">{{ text }}</p1>
-                    </div>
+                    </div> 
                     
                     
                     <!-- <div id="SOUND" style="display: inline-block">
@@ -147,7 +148,7 @@
                         <p1 id="sound">{{ text }}</p1>
                     </div> -->
 
-                    <div id="FORCEBAR" style="display: inline-block">
+                     <div id="FORCEBAR" style="display: inline-block">
                         <canvas id="myChartForceBar" width="500px" height="200px"></canvas>
                         <p1 id="leftForce">{{ text }}</p1>
                         <p1 id="rightForce">{{ text }}</p1>
@@ -159,12 +160,12 @@
                         <canvas id="myChartForceMaxLine" width="500px" height="200px"></canvas>
                         <p1 id="maxForce">{{ text }}</p1>
                     </div>
-
+<!-- 
                     <div id="PIR" style="display: inline-block">
                         <canvas id="myChartPIR" width="500px" height="200px"></canvas>
                         <p1 id="pir">{{ text }}</p1>
                     </div>
-
+                    -->
                     
                     <!-- <div id="PHOTODIODE" style="display: inline-block">
                         <canvas id="myChartPhotoDiode" width="500px" height="200px"></canvas>
@@ -199,7 +200,7 @@
         const ctx = document.getElementById('myChartAcc');
 
 
-
+        
         const myChartAcc = new Chart(ctx, {
             type: 'bar', // added to make bar graph
             //type: 'line', // removed to make bar graph
@@ -248,12 +249,14 @@
                 scales: {
                     y: {
                         suggestedMin: 0,
-                        suggestedMax: 100
+                        suggestedMax: 20
                     }
                 }
 
             }            
         });
+        
+    
 
         const ctx2 = document.getElementById('myChartTemp');
         const myChartTemp = new Chart(ctx2, {
@@ -341,6 +344,7 @@
         });
         */
 
+
         const ctx4 = document.getElementById('myChartForceBar');
         const myChartForceBar = new Chart(ctx4, {
             type: 'bar', // added to make bar graph
@@ -406,6 +410,8 @@
 
             }            
         });
+        
+        
         function updateThreshold() {
             var x = document.getElementById("thresholdForm");
             if (x.elements[0].value != '') {
@@ -453,6 +459,7 @@
 
         }
 
+
         const ctx5 = document.getElementById('myChartForceMaxLine');
         const myChartForceMaxLine = new Chart(ctx5, {
             type: 'line',
@@ -492,7 +499,7 @@
                 }
             }
         });
-        
+        /*
         const ctx6 = document.getElementById('myChartPIR');
         const myChartPIR = new Chart(ctx6, {
             type: 'line', // removed to make bar graph
@@ -532,6 +539,7 @@
                 }
             }
         });
+        */
 
         /*
         const ctx7 = document.getElementById('myChartPhotoDiode');
@@ -665,6 +673,7 @@
                 console.log(myDataSound);
             }
             */
+
 
             else if (data.sensor == 'accx') {
                 if (time_counter % displayFreq == 0) { 
@@ -841,6 +850,7 @@
 
             }
             
+            
             /*
             else if (data.sensor == 'ircamera') {
 
@@ -849,6 +859,8 @@
                 
             }
             */
+            
+            /*
             else if (data.sensor == 'pir') {                
                 if (time_counter % displayFreq == 0) { 
                     document.querySelector('#pir').innerText = "\xa0\xa0\xa0\xa0 PIR = " + data.value + " UNITS"; //JSON.stringify(data);
@@ -868,6 +880,7 @@
                 myChartPIR.update(); // 'none' removes animations
                 console.log(myDataPIR);
             }
+            */
             /*
             else if (data.sensor == 'photoDiode') {                
                 if (time_counter % displayFreq == 0) { 

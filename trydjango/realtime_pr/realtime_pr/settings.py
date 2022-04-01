@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-&wd_f-h-h5*-($@a%umchz%8s-8en&!-c)8$6_9eqoosq0m!-8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.155.5.219', '127.0.0.1']
+ALLOWED_HOSTS = ['.herokuapp.com','10.155.60.15', '127.0.0.1']
 
 
 # Application definition
@@ -85,6 +85,11 @@ DATABASES = {
     }
 }
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
