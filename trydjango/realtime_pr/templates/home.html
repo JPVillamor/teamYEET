@@ -2,6 +2,8 @@
 {% load static %}
 <html>
     <head>
+        <form action="" method = "POST">
+            {% csrf_token %}
     <title>MAT App</title>
 
 	<style>
@@ -9,10 +11,18 @@
         p {text-align: center;}
 	</style>
 	<h1>Welcome to the EOD MAT Trainer</h1>
+    
+    <!-- MAULIK EDITS -->
+    <form method = "POST" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form}}
+        <button>Submit</button>
+    </form>
 	
   <p>Please enter your name</p>
 	<div id="myDIV" style="text-align:center;">
-	<form action="/action_page.php">
+	<form action="" method = "POST">
+        {% csrf_token %}
 		<label for="fname">First name:</label>
 		<input type="text" id="fname" name="fname"><br><br>
 		<label for="lname">Last name:</label>
@@ -101,7 +111,8 @@
     <button id="light">Light</button>
     <br><br><br><br> -->
 
-    <form action="{% url 'force_setup'%}">
+    <form action="{% url 'force_setup'%}"method = "POST">
+        {% csrf_token %}
       <button type="submit">Start</button>
       </form>
 </div>

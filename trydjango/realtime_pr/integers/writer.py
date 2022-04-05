@@ -43,7 +43,7 @@ def write_bottomForce():
 		bforce_output_file = open('bforce_output.txt', 'wt')
 		bforce_output_file.write(str(round(output, 2)))
 		bforce_output_file.close()
-		#time.sleep(.2)
+		time.sleep(.1)
 
 def write_topForce():
 	while True:
@@ -53,7 +53,7 @@ def write_topForce():
 		tforce_output_file = open('tforce_output.txt', 'wt')
 		tforce_output_file.write(str(round(output, 2)))
 		tforce_output_file.close()
-		#time.sleep(.2)
+		time.sleep(.1)
 
 def write_leftForce():
 	while True:
@@ -63,7 +63,7 @@ def write_leftForce():
 		lforce_output_file = open('lforce_output.txt', 'wt')
 		lforce_output_file.write(str(round(output, 2)))
 		lforce_output_file.close()
-		#time.sleep(.2)
+		time.sleep(.1)
 		
 def write_rightForce():
 	while True:
@@ -73,7 +73,7 @@ def write_rightForce():
 		rforce_output_file = open('rforce_output.txt', 'wt')
 		rforce_output_file.write(str(round(output, 2)))
 		rforce_output_file.close()
-		#time.sleep(.2)
+		time.sleep(.1)
 
 temp_thread = threading.Thread(target=write_temp)
 accx_thread = threading.Thread(target=write_accx)

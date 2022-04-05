@@ -60,6 +60,23 @@ class Record(models.Model):
     class Meta:
         ordering = ["timestamp"]
 
+
 class UserInfo(models.Model):
-        name = models.CharField(max_length = 100)
+    fname = models.CharField(max_length = 100, default = 'fredy')
+    lname = models.CharField(max_length = 100, default = 'fuentes')
+    material = models.CharField(max_length = 200, default = 'wood')
+    tool = models.CharField(max_length = 200, default = 'hammer')
+    
+from django.forms import ModelForm
+from django import forms
+
+class UserInfoForm(ModelForm):
+    fname = forms.TextInput()
+    lname = forms.TextInput()
+    material = forms.TextInput()
+    tool = forms.TextInput()
+    class Meta:
+        model = UserInfo
+        fields = ['fname', 'lname', 'material', 'tool']
+    
         
